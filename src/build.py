@@ -1,6 +1,7 @@
 """Build every aibuilders.id logo variant from source.
 
 Sources (this folder):
+  outline.svg - the sticker outline (full silhouette of the original, drawn behind everything)
   black.svg  - the keycap body (potrace of the original logo.png); its holes are the key face + arrow
   white.svg  - the key face (with the arrow cut out)
   SpaceGrotesk-Variable.ttf - wordmark font, set at weight 700, outlined to paths
@@ -35,12 +36,14 @@ TRACK = -0.015  # em, same as .brand-word in ds.css
 def path_d(svgfile):
     return re.search(r'<path d="([^"]+)"', (SRC / svgfile).read_text(), re.S).group(1).replace("\n", " ")
 
-BODY, FACE = path_d("black.svg"), path_d("white.svg")
+BODY, FACE, OUTLINE = path_d("black.svg"), path_d("white.svg"), path_d("outline.svg")
 MW, MH = 3122, 2720  # potrace canvas (cropped original)
 
-def mark(x, y, h, body, face=None):
+def mark(x, y, h, body, face=None, ol=None):
     s = h / MH
     g = f'<g transform="translate({x:.2f},{y:.2f}) scale({s:.5f}) translate(0,{MH}) scale(0.1,-0.1)">'
+    if ol:
+        g += f'<path fill="{ol}" d="{OUTLINE}"/>'
     if face:
         g += f'<path fill="{face}" d="{FACE}"/>'
     g += f'<path fill="{body}" d="{BODY}"/></g>'
@@ -103,30 +106,30 @@ PAD = 0.25 * H     # clear space on exported files (≈ ¼ mark height)
 TXT = 0.46 * H     # wordmark ink height in horizontal lockup
 GAP = 0.20 * H
 
-def horizontal(body, face, text, bg=None, pad=PAD):
+def horizontal(body, face, text, bg=None, pad=PAD, ol=None):
     mw = MW / MH * H
     tw = word_w(TXT)
     w, h = pad * 2 + mw + GAP + tw, pad * 2 + H
-    m = mark(pad, pad, H, body, face)
+    m = mark(pad, pad, H, body, face, ol)
     t, _ = word(pad + mw + GAP, pad + (H - TXT) / 2 + 0.04 * H, TXT, text)  # nudge: optical centre of the keycap sits low
     return svg(w, h, m + t, bg)
 
-def stacked(body, face, text, bg=None, pad=PAD):
+def stacked(body, face, text, bg=None, pad=PAD, ol=None):
     mw = MW / MH * H
     th = 0.36 * H
     tw = word_w(th)
     w = pad * 2 + max(mw, tw)
     h = pad * 2 + H + 0.22 * H + th
-    m = mark((w - mw) / 2, pad, H, body, face)
+    m = mark((w - mw) / 2, pad, H, body, face, ol)
     t, _ = word((w - tw) / 2, pad + H + 0.22 * H, th, text)
     return svg(w, h, m + t, bg)
 
-def mark_only(body, face, bg=None, pad=PAD, square=False, rx=0):
+def mark_only(body, face, bg=None, pad=PAD, square=False, rx=0, ol=None):
     mw = MW / MH * H
     if square:
         side = max(mw, H) + pad * 2
-        return svg(side, side, mark((side - mw) / 2, (side - H) / 2, H, body, face), bg, rx)
-    return svg(mw + pad * 2, H + pad * 2, mark(pad, pad, H, body, face), bg)
+        return svg(side, side, mark((side - mw) / 2, (side - H) / 2, H, body, face, ol), bg, rx)
+    return svg(mw + pad * 2, H + pad * 2, mark(pad, pad, H, body, face, ol), bg)
 
 def wordmark(fill, bg=None, pad=PAD * 0.6):
     th = TXT
@@ -135,36 +138,40 @@ def wordmark(fill, bg=None, pad=PAD * 0.6):
     return svg(tw + pad * 2, th + pad * 2, t, bg)
 
 ink, cream = C["ink"], C["cream"]
+O = cream  # sticker outline — always cream, it's what separates the keycap from any background
 FILES = {
-    # 01 — primary (light backgrounds): ink keycap, cream face
-    "01-primary/aibuilders-logo-horizontal.svg": horizontal(ink, cream, ink),
-    "01-primary/aibuilders-logo-stacked.svg":    stacked(ink, cream, ink),
-    "01-primary/aibuilders-mark.svg":            mark_only(ink, cream),
+    # 01 — primary: ink keycap, cream face, cream sticker outline. Works on light AND dark backgrounds
+    "01-primary/aibuilders-logo-horizontal.svg": horizontal(ink, cream, ink, ol=O),
+    "01-primary/aibuilders-logo-stacked.svg":    stacked(ink, cream, ink, ol=O),
+    "01-primary/aibuilders-mark.svg":            mark_only(ink, cream, ol=O),
     "01-primary/aibuilders-wordmark.svg":        wordmark(ink),
-    # 02 — reversed (dark / photo backgrounds): cream keycap, ink face
+    # 01 — primary for dark backgrounds: same outlined keycap, cream wordmark
+    "01-primary/aibuilders-logo-horizontal-dark-bg.svg": horizontal(ink, cream, cream, ol=O),
+    "01-primary/aibuilders-logo-stacked-dark-bg.svg":    stacked(ink, cream, cream, ol=O),
+    # 02 — reversed (optional alternative on dark): cream keycap, ink face, no outline
     "02-reversed/aibuilders-logo-horizontal-reversed.svg": horizontal(cream, ink, cream),
     "02-reversed/aibuilders-logo-stacked-reversed.svg":    stacked(cream, ink, cream),
     "02-reversed/aibuilders-mark-reversed.svg":            mark_only(cream, ink),
     "02-reversed/aibuilders-wordmark-reversed.svg":        wordmark(cream),
-    # 03 — one-colour (face knocked out to transparent) for print, stamps, embroidery, watermarks
+    # 03 — one-colour, no outline (face knocked out) for print, stamps, embroidery, watermarks
     "03-mono/aibuilders-logo-horizontal-ink.svg":   horizontal(ink, None, ink),
     "03-mono/aibuilders-mark-ink.svg":              mark_only(ink, None),
     "03-mono/aibuilders-logo-horizontal-cream.svg": horizontal(cream, None, cream),
     "03-mono/aibuilders-mark-cream.svg":            mark_only(cream, None),
-    # 04 — on brand-colour backgrounds
-    "04-on-color/aibuilders-logo-horizontal-on-ink.svg":   horizontal(cream, ink, cream, bg=ink, pad=0.45 * H),
-    "04-on-color/aibuilders-logo-horizontal-on-kraft.svg": horizontal(ink, cream, ink, bg=C["kraft"], pad=0.45 * H),
-    "04-on-color/aibuilders-logo-horizontal-on-red.svg":   horizontal(cream, C["red"], cream, bg=C["red"], pad=0.45 * H),
-    "04-on-color/aibuilders-logo-horizontal-on-blue.svg":  horizontal(cream, C["blue"], cream, bg=C["blue"], pad=0.45 * H),
-    "04-on-color/aibuilders-logo-stacked-on-ink.svg":      stacked(cream, ink, cream, bg=ink, pad=0.45 * H),
-    "04-on-color/aibuilders-logo-stacked-on-kraft.svg":    stacked(ink, cream, ink, bg=C["kraft"], pad=0.45 * H),
-    # 05 — app icon / avatar / favicon tiles (square, mark only)
-    "05-icon/aibuilders-icon-ink.svg":    mark_only(cream, ink, bg=ink, pad=0.3 * H, square=True),
-    "05-icon/aibuilders-icon-kraft.svg":  mark_only(ink, cream, bg=C["kraft"], pad=0.3 * H, square=True),
-    "05-icon/aibuilders-icon-red.svg":    mark_only(cream, C["red"], bg=C["red"], pad=0.3 * H, square=True),
-    "05-icon/aibuilders-icon-blue.svg":   mark_only(cream, C["blue"], bg=C["blue"], pad=0.3 * H, square=True),
-    "05-icon/aibuilders-icon-yellow.svg": mark_only(ink, cream, bg=C["yellow"], pad=0.3 * H, square=True),
-    "05-icon/favicon.svg":                mark_only(cream, ink, bg=ink, pad=0.14 * H, square=True, rx=int(0.28 * H)),
+    # 04 — on brand-colour backgrounds: outlined ink keycap everywhere
+    "04-on-color/aibuilders-logo-horizontal-on-ink.svg":   horizontal(ink, cream, cream, bg=ink, pad=0.45 * H, ol=O),
+    "04-on-color/aibuilders-logo-horizontal-on-kraft.svg": horizontal(ink, cream, ink, bg=C["kraft"], pad=0.45 * H, ol=O),
+    "04-on-color/aibuilders-logo-horizontal-on-red.svg":   horizontal(ink, cream, cream, bg=C["red"], pad=0.45 * H, ol=O),
+    "04-on-color/aibuilders-logo-horizontal-on-blue.svg":  horizontal(ink, cream, cream, bg=C["blue"], pad=0.45 * H, ol=O),
+    "04-on-color/aibuilders-logo-stacked-on-ink.svg":      stacked(ink, cream, cream, bg=ink, pad=0.45 * H, ol=O),
+    "04-on-color/aibuilders-logo-stacked-on-kraft.svg":    stacked(ink, cream, ink, bg=C["kraft"], pad=0.45 * H, ol=O),
+    # 05 — app icon / avatar / favicon tiles (square, outlined mark)
+    "05-icon/aibuilders-icon-ink.svg":    mark_only(ink, cream, bg=ink, pad=0.3 * H, square=True, ol=O),
+    "05-icon/aibuilders-icon-kraft.svg":  mark_only(ink, cream, bg=C["kraft"], pad=0.3 * H, square=True, ol=O),
+    "05-icon/aibuilders-icon-red.svg":    mark_only(ink, cream, bg=C["red"], pad=0.3 * H, square=True, ol=O),
+    "05-icon/aibuilders-icon-blue.svg":   mark_only(ink, cream, bg=C["blue"], pad=0.3 * H, square=True, ol=O),
+    "05-icon/aibuilders-icon-yellow.svg": mark_only(ink, cream, bg=C["yellow"], pad=0.3 * H, square=True, ol=O),
+    "05-icon/favicon.svg":                mark_only(ink, cream, bg=ink, pad=0.14 * H, square=True, rx=int(0.28 * H), ol=O),
 }
 
 for rel, content in FILES.items():

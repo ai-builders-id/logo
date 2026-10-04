@@ -56,11 +56,11 @@ def dont(inner, label, bg=KRAFT):
 H = uri("01-primary/aibuilders-logo-horizontal.svg")
 HR = uri("02-reversed/aibuilders-logo-horizontal-reversed.svg")
 DONTS = [
-    dont(f'<img src="{H}" style="width:300px;transform:scale(1.35,0.6)">', "Don't stretch or squash"),
+    dont(f'<img src="{H}" style="width:220px;transform:scale(1.35,0.6)">', "Don't stretch or squash"),
     dont(f'<img src="{H}" style="width:300px;transform:rotate(-12deg)">', "Don't rotate"),
     dont(f'<img src="{H}" style="width:300px;filter:hue-rotate(140deg) saturate(8)">', "Don't recolour off-palette"),
     dont(f'<img src="{H}" style="width:300px;filter:drop-shadow(8px 8px 6px rgba(0,0,0,.6))">', "Don't add effects or shadows"),
-    dont(f'<img src="{H}" style="width:300px">', "Don't put primary on dark", bg=INK),
+    dont(f'<img src="{uri("03-mono/aibuilders-logo-horizontal-ink.svg")}" style="width:300px">', "Don't drop the outline on dark", bg=INK),
     dont(f'<img src="{HR}" style="width:300px">', "Don't put reversed on light", bg=CREAM),
     dont(f'<div style="font:700 34px \'Space Grotesk\';white-space:nowrap;display:flex;align-items:center;gap:10px"><img src="{uri("01-primary/aibuilders-mark.svg")}" style="height:48px">AI Builders ID</div>', "Don't retype or change case"),
     dont(f'<img src="{H}" style="width:300px">', "Don't use busy backgrounds",
@@ -84,6 +84,12 @@ PAGES["palette.png"] = (1400, 290, BASE + f"""
 # --- reversed / mono previews on the backgrounds they're meant for (transparent PNGs vanish on GitHub light mode)
 def tile(rel, bg, w=520):
     return f'<div style="background:{bg};border-radius:12px;padding:40px;display:grid;place-items:center"><img src="{uri(rel)}" style="width:{w}px;max-width:100%"></div>'
+PAGES["on-dark.png"] = (1400, 330, BASE + f"""
+<div style="padding:40px;display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) minmax(0,1fr);gap:24px">
+{tile('01-primary/aibuilders-logo-horizontal-dark-bg.svg', INK, 600)}
+{tile('01-primary/aibuilders-logo-stacked-dark-bg.svg', INK, 260)}
+{tile('01-primary/aibuilders-mark.svg', INK, 200)}
+</div>""")
 PAGES["reversed.png"] = (1400, 330, BASE + f"""
 <div style="padding:40px;display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:24px;align-items:stretch">
 {tile('02-reversed/aibuilders-logo-horizontal-reversed.svg', INK, 600)}

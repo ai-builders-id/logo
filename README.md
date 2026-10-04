@@ -12,21 +12,22 @@ The official logo kit for **aibuilders.id**. Use the files in this repo as they 
 
 <img src="04-on-color/aibuilders-logo-horizontal-on-kraft.png" width="520" alt="Horizontal lockup">
 
-The logo has two parts:
+The logo has three parts:
 
 | Part | What it is | Meaning |
 |---|---|---|
 | **Mark** | A tilted, hand-drawn **Enter keycap** | "Press enter": we ship, we build, we make things happen. The hand-drawn edge matches the whiteboard / war-room look of the site |
+| **Sticker outline** | A cream border around the keycap, like a die-cut sticker (the same idea as Notion's logo) | It separates the keycap from *any* background (light, dark, colored or photo), so the logo stays the same object everywhere |
 | **Wordmark** | `aibuilders.id` in Space Grotesk Bold, lowercase | The name and the address are the same thing, so the `.id` is always included |
 
-The mark and the wordmark always keep the same proportions and spacing. Never put them together by hand; use one of the lockup files.
+The outline belongs to the mark. It is not an effect added on top, so never remove it except in the one-color versions. The mark and the wordmark always keep the same proportions and spacing. Never put them together by hand; use one of the lockup files.
 
 ---
 
 ## 2. Logo variations
 
 ### Primary (default): use this first
-For light backgrounds: kraft, cream, white paper, light UI.
+The ink keycap with its cream sticker outline. **It works on both light and dark backgrounds.** Only the wordmark color changes: ink on light, cream on dark.
 
 | Horizontal lockup | Stacked lockup | Mark only | Wordmark only |
 |---|---|---|---|
@@ -39,18 +40,23 @@ For light backgrounds: kraft, cream, white paper, light UI.
 - **Mark only** is for small sizes, or when the name is already nearby: favicon, avatar, watermark, app icon.
 - **Wordmark only** is for running text, footers, very wide and short spaces, or co-branding rows where every partner is shown as text.
 
-### Reversed: for dark backgrounds and photos
-The keycap and text switch to cream, and the key face takes the background color (ink).
+### Primary on dark backgrounds
+Same outlined keycap, with the wordmark in cream: `01-primary/*-dark-bg`. The mark on its own needs no separate file, because the outline does the separating.
+
+<img src="guidelines/on-dark.png" alt="Primary logo on dark backgrounds">
+
+### Reversed (optional alternative on dark)
+A quieter, flat option for dark backgrounds: the keycap turns cream, the key face takes the background color, and there is no outline. Use it when the outlined keycap feels too loud (e.g. a subtle footer or video watermark). **Primary stays the first choice.**
 
 <img src="guidelines/reversed.png" alt="Reversed versions on ink">
 
 ### Mono (one-color): for print and production
-For when only one color is possible: screen printing, stamps, embroidery, laser engraving, watermarks, fax/B&W print. The key face is **knocked out** (transparent), so the background shows through.
+For when only one color is possible: screen printing, stamps, embroidery, laser engraving, watermarks, fax/B&W print. The key face is **knocked out** (transparent), so the background shows through. **These are the only versions without the sticker outline**, because a single-color job can't print a second color.
 
 <img src="guidelines/mono.png" alt="Mono versions">
 
 ### On brand color
-Ready-made lockups on brand backgrounds for banners, social headers and slide covers.
+Ready-made lockups on brand backgrounds for banners, social headers and slide covers. The keycap is always ink with the cream outline; the wordmark is cream on ink, red and blue, and ink on kraft.
 
 | Ink | Kraft | Red | Blue |
 |---|---|---|---|
@@ -76,11 +82,11 @@ The logo uses the same tokens as the website design system (`ai-builders-prototy
 | Name | HEX | RGB | HSL | CSS token | Role in the logo |
 |---|---|---|---|---|---|
 | **Ink** | `#272C35` | 39 44 53 | 220 15% 18% | `--ink` | Keycap body, wordmark, dark backgrounds |
-| **Cream** | `#FAF7F0` | 250 247 240 | 42 50% 96% | `--cream` | Key face, reversed logo |
+| **Cream** | `#FAF7F0` | 250 247 240 | 42 50% 96% | `--cream` | Key face, sticker outline, wordmark on dark |
 | **Kraft** | `#F3EFE8` | 243 239 232 | 39 30% 93% | `--kraft` | Default page background |
-| **Red** | `#D92635` | 217 38 53 | 355 70% 50% | `--red` | Accent background (cream logo only) |
-| **Blue** | `#285ABD` | 40 90 189 | 220 65% 45% | `--blue` | Accent background (cream logo only) |
-| **Yellow** | `#F6E9B6` | 246 233 182 | 48 78% 84% | `--note-yellow` | Accent background (primary logo only) |
+| **Red** | `#D92635` | 217 38 53 | 355 70% 50% | `--red` | Accent background (cream wordmark) |
+| **Blue** | `#285ABD` | 40 90 189 | 220 65% 45% | `--blue` | Accent background (cream wordmark) |
+| **Yellow** | `#F6E9B6` | 246 233 182 | 48 78% 84% | `--note-yellow` | Accent background (ink wordmark) |
 
 **The logo itself is only ever ink and/or cream.** Red, blue and yellow are background colors; the logo is never drawn in them, except as the knocked-out key face that shows the background.
 
@@ -125,14 +131,14 @@ Below these sizes the arrow inside the keycap closes up. If you need it smaller,
 
 | Background | Use |
 |---|---|
-| Kraft, cream, white, light gray | **Primary** (`01-primary`) |
-| Ink, black, dark photos, dark mode UI | **Reversed** (`02-reversed`) |
-| Red or blue | **Cream** logo: `04-on-color/*-on-red`, `*-on-blue`, or `03-mono/*-cream` |
-| Yellow / pastel sticky-note colors | **Primary** |
-| Busy photo or pattern | Put a solid ink or kraft panel behind the logo first, then follow the rows above |
+| Kraft, cream, white, light gray | **Primary** (`01-primary`) with ink wordmark |
+| Ink, black, dark photos, dark mode UI | **Primary dark-bg** (`01-primary/*-dark-bg`), or reversed (`02-reversed`) as a quieter alternative |
+| Red or blue | Primary with cream wordmark: `04-on-color/*-on-red`, `*-on-blue` |
+| Yellow / pastel sticky-note colors | **Primary** with ink wordmark |
+| Busy photo or pattern | The outlined mark holds up on its own; for the full lockup, put a solid ink or kraft panel behind it so the wordmark stays readable |
 | Single-color print job | **Mono** (`03-mono`) in ink or cream |
 
-Rule of thumb: **dark logo on light, light logo on dark.** If you have to think about it, the background is too busy.
+Rule of thumb: **the keycap never changes, only the wordmark does: ink on light, cream on dark.** If you have to think about it, the background is too busy.
 
 ---
 
@@ -144,7 +150,8 @@ Rule of thumb: **dark logo on light, light logo on dark.** If you have to think 
 - ✕ Don't rotate it. The keycap's tilt is already built in.
 - ✕ Don't recolor it outside ink/cream, and don't use gradients.
 - ✕ Don't add drop shadows, outlines, glows, bevels or 3D effects.
-- ✕ Don't put the primary (dark) logo on dark backgrounds, or the reversed logo on light ones.
+- ✕ Don't remove the sticker outline, or recolor it to anything other than cream. Only the one-color versions go without it.
+- ✕ Don't put the reversed logo on light backgrounds, or an ink wordmark on dark ones.
 - ✕ Don't retype the name, change its case (`AI Builders ID`, `AiBuilders`), or drop the `.id`.
 - ✕ Don't place it on busy photos or patterns without a solid panel.
 - ✕ Don't rearrange the mark and the wordmark, or change the spacing between them.
@@ -155,11 +162,11 @@ Rule of thumb: **dark logo on light, light logo on dark.** If you have to think 
 ## 9. File guide
 
 ```
-01-primary/     default, for light backgrounds        horizontal · stacked · mark · wordmark
-02-reversed/    cream, for dark backgrounds            horizontal · stacked · mark · wordmark
-03-mono/        one-color, key face knocked out        ink · cream
+01-primary/     default, outlined keycap               horizontal · stacked · mark · wordmark · *-dark-bg
+02-reversed/    flat cream alternative for dark        horizontal · stacked · mark · wordmark
+03-mono/        one-color, no outline, face knocked out   ink · cream
 04-on-color/    lockups on ink / kraft / red / blue    horizontal · stacked
-05-icon/        square mark tiles + favicons           1024 px tiles, favicon 32 / 180 / 512 + favicon.svg
+05-icon/        square outlined-mark tiles + favicons  1024 px tiles, favicon 32 / 180 / 512 + favicon.svg
 guidelines/     illustrations used in this README
 src/            source vectors, font, build scripts
 ```
@@ -188,5 +195,5 @@ python3 src/guidelines.py   # README illustrations
 ```
 
 - Colors, sizes, padding and the variant list are defined at the top of `src/build.py`.
-- `src/black.svg` (keycap body) and `src/white.svg` (key face) are vector traces of the original hand-drawn logo.
+- `src/outline.svg` (sticker outline), `src/black.svg` (keycap body) and `src/white.svg` (key face) are vector traces of the original hand-drawn logo.
 - `src/SpaceGrotesk-Variable.ttf` is from Google Fonts (SIL Open Font License).
