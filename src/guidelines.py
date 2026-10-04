@@ -104,14 +104,27 @@ PAGES["mono.png"] = (1400, 330, BASE + f"""
 {tile('03-mono/aibuilders-mark-cream.svg', INK, 150)}
 </div>""")
 
+# --- README buttons (GitHub strips CSS, so buttons are images)
+def button(label, icon, bg, fg):
+    return (380, 72, BASE + f"""<style>body{{background:transparent}}</style>
+<div style="display:inline-block;padding:2px 8px 8px 2px"><div style="display:inline-flex;align-items:center;gap:12px;background:{bg};color:{fg};padding:0 26px;height:64px;
+border:2px solid {INK};border-radius:12px 4px 12px 4px;box-shadow:3px 4px 0 {INK};font-size:22px;font-weight:700;white-space:nowrap">
+<span style="font-size:24px">{icon}</span>{label}</div></div>""")
+PAGES["btn-download-zip.png"] = button("Download all logos (.zip)", "⬇", INK, CREAM)
+PAGES["btn-pdf.png"] = button("Brand guide (PDF)", "📄", CREAM, INK)
+
 with sync_playwright() as pw:
     br = pw.chromium.launch()
     for name, (w, h, html) in PAGES.items():
-        pg = br.new_page(viewport={"width": w, "height": h}, device_scale_factor=1)
+        btn = name.startswith("btn-")
+        pg = br.new_page(viewport={"width": w, "height": h}, device_scale_factor=2 if btn else 1)
         f = OUT / "_tmp.html"
         f.write_text(f"<html><body>{html}</body></html>")
         pg.goto(f.as_uri()); pg.wait_for_timeout(600)
-        pg.screenshot(path=str(OUT / name), full_page=True)
+        if btn:
+            pg.locator("body > div").screenshot(path=str(OUT / name), omit_background=True)
+        else:
+            pg.screenshot(path=str(OUT / name), full_page=True)
         pg.close()
     (OUT / "_tmp.html").unlink()
     br.close()

@@ -4,6 +4,14 @@
 
 The official logo kit for **aibuilders.id**. Use the files in this repo as they are. Don't redraw, retype or recolor the logo.
 
+<p align="center">
+  <a href="https://github.com/ai-builders-id/logo/archive/refs/heads/main.zip"><img src="guidelines/btn-download-zip.png" height="56" alt="Download all logos (.zip)"></a>
+  &nbsp;
+  <a href="README.pdf"><img src="guidelines/btn-pdf.png" height="56" alt="Brand guide (PDF)"></a>
+</p>
+
+Not technical? Click **Download all logos (.zip)**, unzip it, and pick a file from the folder you need (see the [file guide](#9-file-guide)). Or read the same guide as a **[PDF](README.pdf)**.
+
 **Contents:** [Logo anatomy](#1-logo-anatomy) · [Variations](#2-logo-variations) · [Color](#3-color) · [Typography](#4-typography) · [Clear space](#5-clear-space) · [Minimum size](#6-minimum-size) · [Backgrounds](#7-choosing-the-right-version-for-the-background) · [Misuse](#8-misuse) · [File guide](#9-file-guide) · [Rebuilding](#10-rebuilding-the-files)
 
 ---
@@ -35,6 +43,7 @@ The ink keycap with its cream sticker outline. **It works on both light and dark
 | `01-primary/aibuilders-logo-horizontal` | `01-primary/aibuilders-logo-stacked` | `01-primary/aibuilders-mark` | `01-primary/aibuilders-wordmark` |
 
 **Which lockup to use:**
+
 - **Horizontal** is the default: website header, documents, slides, email signatures, invoices.
 - **Stacked** is for square or narrow spaces: posters, merch, splash screens, certificates.
 - **Mark only** is for small sizes, or when the name is already nearby: favicon, avatar, watermark, app icon.
@@ -189,11 +198,13 @@ src/            source vectors, font, build scripts
 Every SVG and PNG is generated, so don't edit the exports by hand.
 
 ```bash
-pip install fonttools uharfbuzz playwright && playwright install chromium
+pip install fonttools uharfbuzz markdown playwright && playwright install chromium
 python3 src/build.py        # logo variants (SVG + PNG)
-python3 src/guidelines.py   # README illustrations
+python3 src/guidelines.py   # README illustrations + buttons
+python3 src/readme_pdf.py   # README.pdf (non-technical version of this README)
 ```
 
 - Colors, sizes, padding and the variant list are defined at the top of `src/build.py`.
 - `src/outline.svg` (sticker outline), `src/black.svg` (keycap body) and `src/white.svg` (key face) are vector traces of the original hand-drawn logo.
-- `src/SpaceGrotesk-Variable.ttf` is from Google Fonts (SIL Open Font License).
+- `src/SpaceGrotesk-Variable.ttf` is from Google Fonts (SIL Open Font License, see `src/OFL.txt`).
+- After editing this README, rerun `src/readme_pdf.py` so the PDF stays in sync.
